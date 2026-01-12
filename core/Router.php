@@ -23,7 +23,22 @@ public static function getRouter() : RouterSystem{
     }
 
 
+private function register(string $route , string $method , array|callable $action ){
 
+    $route = trim($route , '/');
+
+    self::$routes[$method][$route] = $action;
+
+}
+
+public function get(string $route , array|callable $action ){
+    $this->register($route , 'GET' , $action);
+
+}
+
+public function post(string $route , array|callable $action){
+    $this->register($route , "POST", $action );
+}
 
 }
 
