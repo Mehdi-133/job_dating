@@ -1,0 +1,15 @@
+{
+    "name": "lenovo/job_dating",
+    "autoload": {
+        "psr-4": {
+            "core\\": "core/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mehdi-133",
+            "email": "mehdikarbitou@gmail.com"
+        }
+    ],
+    "require": {}
+}
