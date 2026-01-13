@@ -6,5 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Lenovo\\JobDating\\' => array($baseDir . '/src'),
+    'core\\' => array($baseDir . '/core'),
 );
