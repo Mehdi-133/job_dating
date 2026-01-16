@@ -1,30 +1,131 @@
 <?php
 
 require_once '../vendor/autoload.php';
-require_once '../app/core/Router.php';
 
-use App\core\RouterSystem;
+use App\core\Router;
+use App\controllers\front\MainController;
+use App\controllers\back\JobController;
+use App\core\Session;
+use App\core\Validator;
+use App\controllers\front\AuthController;
+use App\core\Auth;
 
-$router = RouterSystem::getRouter();
 
-$router->get('', function() {
-    echo "Welcome to Home Page!";
+
+$router = Router::getRouter();
+$router->get('about', function () {
+    return 'about page';
 });
 
-$router->get('about', function() {
-    echo "This is About Page!";
+// $router->get('login', [MainController::class, 'login']);
+$router->get('users', [MainController::class, 'User']);
+$router->get('users/active', [MainController::class, 'activeUsers']);
+$router->get('create',  [JobController::class, 'create']);
+$router->post('dashboard', [JobController::class, 'store']);
+$router->get('users/search', [MainController::class, 'findByEmail']);
+
+
+
+//test session 
+
+$router->get('session', function () {
+
+    Session::start();
+    Session::set('name', 'ahmed');
+    Session::set('age', 20);
+
+    echo "Name: "  . session::get('name') . '<br>';
+    echo "age :"  . session::get('age') . '<br>';
+
+    Session::remove('age');
+    echo "age after remove: " . Session::get('age', 'Removed');
 });
 
-$router->get('contact', function() {
-    echo "Contact Us Page!";
+
+
+
+
+//test security 
+
+
+
+
+
+//test validator
+
+$router->get('test-validator', function () {
+
+
+    $formData = [
+        'name' => '',
+        'email' => 'bad-email',
+        'password' => '123'
+    ];
+
+
+    $validator = new Validator($formData);
+
+    $validator->required('name')
+        ->required('email')
+        ->email('email')
+        ->required('password')
+        ->min('password', 8);
+
+    if ($validator->fails()) {
+        echo "<h2>Validation Failed ❌</h2>";
+        echo "<pre>";
+        print_r($validator->errors());
+        echo "</pre>";
+
+        echo "<h3>Individual Errors:</h3>";
+        echo "Name error: " . $validator->getError('name') . "<br>";
+        echo "Email error: " . $validator->getError('email') . "<br>";
+        echo "Password error: " . $validator->getError('password') . "<br>";
+    } else {
+        echo "<h2>Validation Passed ✅</h2>";
+    }
+
+    echo "<hr>";
+
+    $validData = [
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'password' => 'password123'
+    ];
+
+    $validator2 = new Validator($validData);
+    $validator2->required('name')
+        ->required('email')
+        ->email('email')
+        ->required('password')
+        ->min('password', 8);
+
+    if ($validator2->passes()) {
+        echo "<h2>Valid Data Passed ✅</h2>";
+    }
 });
 
-$router->get('user/{id}', function($id) {
-    echo "Hello User #" . $id;
+
+//test auth
+
+$router->get('register', [AuthController::class, 'showRegister']);
+$router->post('register', [AuthController::class, 'register']);
+$router->get('login', [AuthController::class, 'showLogin']);
+$router->post('login', [AuthController::class, 'login']);
+$router->get('logout', [AuthController::class, 'logout']);
+
+
+$router->get('dashboard', function () {
+
+
+    if (!Auth::check()) {
+        header('Location: /login');
+        exit;
+    }
+
+    require_once '../app/views/main/dashboard.php';
 });
 
-$router->get('profile/{name}', function($name) {
-    echo "Welcome to the profile of " . $name . "! ✨";
-});
+
 
 $router->dispatch();

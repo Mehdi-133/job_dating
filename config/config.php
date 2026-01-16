@@ -3,7 +3,7 @@
 return [
     'app' => [
         'name' => 'Job Dating',
-        'url' => 'http://localhost/job_dating/public',
+        'url' => 'http://localhost8080',
         'debug' => true
     ],
     'database' => [

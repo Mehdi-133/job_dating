@@ -43,6 +43,7 @@ class Validator
         return $this;
     }
 
+
     public function passes()
     {
         return empty($this->errors);
@@ -63,5 +64,3 @@ class Validator
         return $this->errors[$field][0] ?? null;
     }
 }
-
-

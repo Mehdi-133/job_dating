@@ -2,7 +2,7 @@
     "name": "lenovo/job_dating",
     "autoload": {
         "psr-4": {
-            "core\\": "core/"
+            "App\\": "app/"
         }
     },
     "authors": [

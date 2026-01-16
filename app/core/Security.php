@@ -48,8 +48,12 @@ class Security
 
     public static function verifyPassword($password, $hash)
     {
+        if (!$hash) {
+            return false;
+        }
         return password_verify($password, $hash);
     }
+
 
     public static function escape($data)
     {

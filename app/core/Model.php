@@ -40,7 +40,7 @@ class Model
         $placeHolders = ':' . implode(', :', array_keys($data));
         $sql = "INSERT INTO {$this->table} ({$keys}) VALUES ({$placeHolders})";
         $stmt = $this->db->query($sql, $data);
-        return $stmt->lastInsertId->getConnection();
+        return $this->db->getConnection()->lastInsertId();
     }
 
 
@@ -59,5 +59,3 @@ class Model
         return $this->db->query($sql, [$id]);
     }
 }
-
-
