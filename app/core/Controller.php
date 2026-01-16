@@ -3,15 +3,27 @@ namespace App\core;
 
 class Controller
 {
+    protected $view ;
+    public function __construct()
+    {
+        $this->view = new View();
+    }
+
     protected function view($view, $data = [])
     {
-        extract($data);
-        require_once "../app/views/{$view}.php";
+        $this->view->render($view, $data);
     }
+
+
     
-    protected function redirect($url)
-    {
-        header("Location: {$url}");
-        exit;
-    }
+   protected function redirect($url){
+    $basePath = '/job_dating/public/';
+
+    $cleanedUrl = ltrim($url, '/');
+    
+    $finalLocation = $basePath . $cleanedUrl;
+    
+    header("Location: " . $finalLocation);
+    exit;
+}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\core;
 
-class RouterSystem
+class Router
 {
 
     private static array $routes = [];
@@ -9,11 +9,11 @@ class RouterSystem
 
     private function __construct() {}
 
-    public static function getRouter(): RouterSystem
+    public static function getRouter(): Router
     {
 
         if (!isset(self::$router)) {
-            self::$router = new RouterSystem();
+            self::$router = new Router();
         }
 
         return self::$router;
@@ -86,12 +86,21 @@ class RouterSystem
     }
 
     private function resolveAction($action, $routeParams = [])
-    {
-        if (is_callable($action)) {
-            return call_user_func_array($action, array_values($routeParams));
-        }
-        return $action;
+{
+   
+    if (is_callable($action)) {
+        return call_user_func_array($action, array_values($routeParams));
     }
+
+    
+    if (is_array($action)) {
+        $controllerName = $action[0]; 
+        $methodName = $action[1];   
+
+        $controller = new $controllerName();
+        return call_user_func_array([$controller, $methodName], array_values($routeParams));
+    }
+}
 
     private function abort($message)
     {
