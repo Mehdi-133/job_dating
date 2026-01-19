@@ -11,5 +11,6 @@ return [
         'name' => 'job_dating',
         'username' => 'root',
         'password' => ''
+
     ]
 ];
