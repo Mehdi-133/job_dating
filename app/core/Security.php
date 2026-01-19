@@ -6,27 +6,25 @@ class Security
 {
     public static function generateToken()
     {
-        Session::start();
+        $session = Session::getInstance();
         $token = bin2hex(random_bytes(32));
-        Session::set('csrf_token', $token);
+        $session->set('csrf_token', $token);
         return $token;
     }
 
-
     public static function getToken()
     {
-        Session::start();
-        if (!Session::has('csrf_token')) {
+        $session = Session::getInstance();
+        if (!$session->has('csrf_token')) {
             return self::generateToken();
         }
-        return Session::get('csrf_token');
+        return $session->get('csrf_token');
     }
-
 
     public static function validateToken($token)
     {
-        Session::start();
-        $storedToken = Session::get('csrf_token');
+        $session = Session::getInstance();
+        $storedToken = $session->get('csrf_token');
 
         if (!$storedToken || !$token) {
             return false;
@@ -37,7 +35,8 @@ class Security
 
     public static function regenerateToken()
     {
-        Session::remove('csrf_token');
+        $session = Session::getInstance();
+        $session->remove('csrf_token');
         return self::generateToken();
     }
 
@@ -53,7 +52,6 @@ class Security
         }
         return password_verify($password, $hash);
     }
-
 
     public static function escape($data)
     {

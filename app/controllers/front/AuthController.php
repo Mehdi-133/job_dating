@@ -32,6 +32,7 @@ class AuthController extends Controller
             ->required('password')
             ->min('password', 8);
 
+
         if ($validator->fails()) {
             $token = Security::getToken();
             $this->view('auth/register', [
@@ -74,6 +75,7 @@ class AuthController extends Controller
         $validator->required('email')
             ->email('email')
             ->required('password');
+
 
         if ($validator->fails()) {
             $token = Security::getToken();

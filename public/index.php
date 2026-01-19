@@ -10,61 +10,38 @@ use App\core\Validator;
 use App\controllers\front\AuthController;
 use App\core\Auth;
 
-
-
 $router = Router::getRouter();
+
 $router->get('about', function () {
     return 'about page';
 });
 
-// $router->get('login', [MainController::class, 'login']);
 $router->get('users', [MainController::class, 'User']);
 $router->get('users/active', [MainController::class, 'activeUsers']);
-$router->get('create',  [JobController::class, 'create']);
+$router->get('create', [JobController::class, 'create']);
 $router->post('dashboard', [JobController::class, 'store']);
 $router->get('users/search', [MainController::class, 'findByEmail']);
 
-
-
-//test session 
-
 $router->get('session', function () {
+    $session = Session::getInstance();
+    $session->set('name', 'ahmed');
+    $session->set('age', 20);
 
-    Session::start();
-    Session::set('name', 'ahmed');
-    Session::set('age', 20);
+    echo "Name: " . $session->get('name') . '<br>';
+    echo "age: " . $session->get('age') . '<br>';
 
-    echo "Name: "  . session::get('name') . '<br>';
-    echo "age :"  . session::get('age') . '<br>';
-
-    Session::remove('age');
-    echo "age after remove: " . Session::get('age', 'Removed');
+    $session->remove('age');
+    echo "age after remove: " . $session->get('age', 'Removed');
 });
 
-
-
-
-
-//test security 
-
-
-
-
-
-//test validator
-
 $router->get('test-validator', function () {
-
-
     $formData = [
         'name' => '',
         'email' => 'bad-email',
         'password' => '123'
     ];
 
-
     $validator = new Validator($formData);
-
     $validator->required('name')
         ->required('email')
         ->email('email')
@@ -105,19 +82,13 @@ $router->get('test-validator', function () {
     }
 });
 
-
-//test auth
-
 $router->get('register', [AuthController::class, 'showRegister']);
 $router->post('register', [AuthController::class, 'register']);
 $router->get('login', [AuthController::class, 'showLogin']);
 $router->post('login', [AuthController::class, 'login']);
 $router->get('logout', [AuthController::class, 'logout']);
 
-
 $router->get('dashboard', function () {
-
-
     if (!Auth::check()) {
         header('Location: /login');
         exit;
@@ -125,7 +96,5 @@ $router->get('dashboard', function () {
 
     require_once '../app/views/main/dashboard.php';
 });
-
-
 
 $router->dispatch();

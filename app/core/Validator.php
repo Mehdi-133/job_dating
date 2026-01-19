@@ -27,6 +27,8 @@ class Validator
         }
         return $this;
     }
+
+
     public function min($field, $length, $message = null)
     {
         if (!empty($this->data[$field]) && strlen($this->data[$field]) < $length) {

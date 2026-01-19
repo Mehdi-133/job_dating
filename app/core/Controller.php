@@ -1,29 +1,39 @@
 <?php
+
 namespace App\core;
 
 class Controller
 {
-    protected $view ;
+    protected $view;
+
     public function __construct()
     {
         $this->view = new View();
     }
 
-    protected function view($view, $data = [])
+    protected function render(string $view, array $data = []): void
     {
-        $this->view->render($view, $data);
+        View::render($view, $data);
     }
 
 
-    
-   protected function redirect($url){
-    $basePath = '/job_dating/public/';
+        protected
+        function view($view, $data = [])
+        {
+            $this->view->render($view, $data);
+        }
 
-    $cleanedUrl = ltrim($url, '/');
-    
-    $finalLocation = $basePath . $cleanedUrl;
-    
-    header("Location: " . $finalLocation);
-    exit;
-}
-}
+
+        protected
+        function redirect($url)
+        {
+            $basePath = '/job_dating/public/';
+
+            $cleanedUrl = ltrim($url, '/');
+
+            $finalLocation = $basePath . $cleanedUrl;
+
+            header("Location: " . $finalLocation);
+            exit;
+        }
+    }

@@ -8,26 +8,26 @@ class Auth
 {
     public static function login($user)
     {
-        Session::start();
-        Session::set('user_id', $user['id']);
-        Session::set('user_email', $user['email']);
-        Session::set('user_name', $user['name']);
-        Session::set('authenticated', true);
+        $session = Session::getInstance();
+        $session->set('user_id', $user['id']);
+        $session->set('user_email', $user['email']);
+        $session->set('user_name', $user['name']);
+        $session->set('authenticated', true);
     }
 
     public static function logout()
     {
-        Session::start();
-        Session::remove('user_id');
-        Session::remove('user_email');
-        Session::remove('user_name');
-        Session::remove('authenticated');
+        $session = Session::getInstance();
+        $session->remove('user_id');
+        $session->remove('user_email');
+        $session->remove('user_name');
+        $session->remove('authenticated');
     }
 
     public static function check()
     {
-        Session::start();
-        return Session::get('authenticated', false);
+        $session = Session::getInstance();
+        return $session->get('authenticated', false);
     }
 
     public static function user()
@@ -36,18 +36,18 @@ class Auth
             return null;
         }
 
-        Session::start();
+        $session = Session::getInstance();
         return [
-            'id' => Session::get('user_id'),
-            'email' => Session::get('user_email'),
-            'name' => Session::get('user_name')
+            'id' => $session->get('user_id'),
+            'email' => $session->get('user_email'),
+            'name' => $session->get('user_name')
         ];
     }
 
     public static function id()
     {
-        Session::start();
-        return Session::get('user_id');
+        $session = Session::getInstance();
+        return $session->get('user_id');
     }
 
     public static function attempt($email, $password)
@@ -70,7 +70,6 @@ class Auth
         self::login($user);
         return true;
     }
-
 
     public static function guest()
     {
